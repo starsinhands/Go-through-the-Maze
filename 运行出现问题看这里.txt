@@ -1,0 +1,11 @@
+编译用的是Visual Studio 2019，所以必须！必须！必须！有Visual Studio软件才能打开，貌似没有平替软件，用一般编译器（包括Visual Studio Code）都可能打不开或更改很繁琐！！！
+所以运行前请先确保运行电脑安装好Visual Code！！
+
+如果编译的时候项目出现了一堆未定义的字符串
+——> 工具👉选项👉文本编辑器👉C/C++👉高级👉禁用Intellisense改为True👉确定
+
+如果编译的时候出现“无法打开包括文件:“graphics.h”: No such file or directory”
+——> 去easyx官网（https://easyx.cn/）下载easyx图形库
+
+如果提示找不到ucrtbased.dll
+—> 打开你的Visual Code👉右键选择项目属性👉C/C++👉代码生成👉运行库，下拉改成“多线程（/MT）”

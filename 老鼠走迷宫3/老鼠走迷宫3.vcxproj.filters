@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="老鼠走迷宫3.cpp">
+    <ClCompile Include="Go through the Maze.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
