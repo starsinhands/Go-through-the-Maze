@@ -1,9 +1,3 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(513,5): warning MSB8028: 中间目录(Debug\)包含从另一个项目(老鼠走迷宫3.vcxproj)共享的文件。   这会导致错误的清除和重新生成行为。
-  Go through the Maze.cpp
-D:\老鼠走迷宫3\老鼠走迷宫3\Go through the Maze.cpp(9,1): warning C4005: “PI”: 宏重定义
-D:\老鼠走迷宫3\老鼠走迷宫3\EasyXPng.h(4): message : 参见“PI”的前一个定义
-D:\老鼠走迷宫3\老鼠走迷宫3\Go through the Maze.cpp(452,21): warning C4018: “<”: 有符号/无符号不匹配
-D:\老鼠走迷宫3\老鼠走迷宫3\Go through the Maze.cpp(987,25): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-D:\老鼠走迷宫3\老鼠走迷宫3\Go through the Maze.cpp(992,44): warning C4244: “参数”: 从“float”转换到“int”，可能丢失数据
-D:\老鼠走迷宫3\老鼠走迷宫3\Go through the Maze.cpp(993,34): warning C4244: “参数”: 从“float”转换到“int”，可能丢失数据
+  LINK : 没有找到 D:\老鼠走迷宫3\Debug\Go through the Maze.exe 或上一个增量链接没有生成它；正在执行完全链接
   老鼠走迷宫3.vcxproj -> D:\老鼠走迷宫3\Debug\Go through the Maze.exe

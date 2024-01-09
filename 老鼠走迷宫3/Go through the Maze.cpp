@@ -373,7 +373,11 @@ void FindAllPath()//找出所有通路----------广度搜素
 		int y;
 		int c;//步数
 	};
-	queue<point> r;//申请队列
+	const int QUEUE_SIZE = 1000;
+	point queueArray[QUEUE_SIZE];
+	int front = 0, rear = 0;
+	//以上三行相当于queue<point> r;   用于申请队列
+
 	//4、定义方向数组:右下左上
 	int dx[5] = { 0, 0, 1, 0, -1 };
 	int dy[5] = { 0, 1, 0, -1, 0 };
@@ -383,12 +387,13 @@ void FindAllPath()//找出所有通路----------广度搜素
 	begin.x = MouseX;
 	begin.y = MouseY;
 	begin.c = 0;
-	r.push(begin);//将起点入队
+	queueArray[rear++] = begin;//将起点入队，相当于r.push(begin);
 	v[MouseX][MouseY] = 9;//起点已访问（老鼠位置）
 	v[EndX][EndY] = 4;//显示终点
-	while (!r.empty())
+	
+	while(front!=rear)//相当于while (!r.empty())
 	{
-		int x = r.front().x, y = r.front().y;//取出队首元素下标
+		int x = queueArray[front].x, y = queueArray[front].y;//取出队首元素下标，相当于int x = r.front().x, y = r.front().y;
 		if (x == EndX && y == EndY)
 		{
 			break;
@@ -403,18 +408,16 @@ void FindAllPath()//找出所有通路----------广度搜素
 				point temp;
 				temp.x = tx;
 				temp.y = ty;
-				temp.c = r.front().c + 1;//err 26:27
-				r.push(temp);
+				temp.c = queueArray[front].c + 1;//相当于temp.c = r.front().c + 1;
+				queueArray[(rear++)%QUEUE_SIZE] = temp;//相当于r.push(temp);
 				v[tx][ty] = 7;//访问+1
 			}
 		}
-		r.pop();//访问完后要将队首元素出队
+		front=(front+1)%QUEUE_SIZE;//访问完后要将队首元素出队，相当于r.pop();
 	}
 	//v[][]数组存放的是全部路径的点，所以接下来将v中的特殊标记赋值给map在到show函数中将数字7绘制出来，在用copymap返回map原貌即可。
-	for (int i = 0; i < bound; i++)
-	{
-		for (int j = 0; j < bound; j++)
-		{
+	for(int i=0;i<bound;i++){
+		for (int j=0;j<bound;j++){
 			map[key][i][j] = v[i][j];
 		}
 	}
@@ -428,29 +431,43 @@ struct point
 	int j;
 };
 
-stack<point> sta;
+const int STACK_SIZE = 1000;
+point sta[STACK_SIZE];
+int top = -1;
+//以上三行相当于stack<point> sta;
 
 int Endx, Endy;
 int Min = 1000;
 int v[100][100] = { 0 };//访问数组0未访问7访问
 int v1[100][100] = { 0 };
 
+void push(point p) {//相当于C++里stack类的push()函数
+	if (top < STACK_SIZE - 1) {
+		sta[++top] = p;
+	}
+}
+point pop() {//相当于C++里stack类的pop()函数
+	point temp;
+	if (top >= 0) {
+		temp = sta[top--];
+	}
+	return temp;
+}
+
 void DFS(int x, int y, int step)//x，y表示当前坐标点
 {
 	if (x == Endx - 1 && y == Endy - 1)//到达终点
 	{
-
 		if (step<Min){
 			Min=step;
 			for(int i=0;i<Min;i++){
 				for(int j=0;j<Min;j++){
-					map[key][sta.top().i][sta.top().j] = 8;
+					map[key][sta[top].i][sta[top].j] = 8;//相当于map[key][sta.top().i][sta.top().j] = 8;
 				}
-				sta.pop();
+				pop();//相当于sta.pop();
 			}
 		}
-		for (int i = 0; i < sta.size(); i++)
-			sta.pop();
+		while (top >= 0)pop();//相当于for (int i = 0; i < sta.size(); i++)sta.pop();
 		return;
 	}
 	else//x，y不是终点:则开始试探
@@ -462,10 +479,9 @@ void DFS(int x, int y, int step)//x，y表示当前坐标点
 			point temp;
 			temp.i = x;
 			temp.j = y + 1;
-			sta.push(temp);
+			push(temp);//相当于sta.push(temp);
 			DFS(x, y + 1, step + 1);
 			v[x][y + 1] = 0;//回溯时设置为0未访问
-			//sta.pop();
 		}
 		if (map[key][x + 1][y] == 1 && v[x + 1][y] == 0)//向下
 		{
@@ -473,10 +489,9 @@ void DFS(int x, int y, int step)//x，y表示当前坐标点
 			point temp;
 			temp.i = x + 1;
 			temp.j = y;
-			sta.push(temp);
+			push(temp);//相当于sta.push(temp);
 			DFS(x + 1, y, step + 1);
 			v[x + 1][y] = 0;//回溯时设置为0未访问
-			//sta.pop();
 		}
 		if (map[key][x][y - 1] == 1 && v[x][y - 1] == 0)//向左
 		{
@@ -484,10 +499,9 @@ void DFS(int x, int y, int step)//x，y表示当前坐标点
 			point temp;
 			temp.i = x;
 			temp.j = y - 1;
-			sta.push(temp);
+			push(temp);//相当于sta.push(temp);
 			DFS(x, y - 1, step + 1);
 			v[x][y - 1] = 0;//回溯时设置为0未访问
-			//sta.pop();
 		}
 		if (map[key][x - 1][y] == 1 && v[x - 1][y] == 0)//向上
 		{
@@ -495,10 +509,9 @@ void DFS(int x, int y, int step)//x，y表示当前坐标点
 			point temp;
 			temp.i = x - 1;
 			temp.j = y;
-			sta.push(temp);
+			push(temp);//相当于sta.push(temp);
 			DFS(x - 1, y, step + 1);
 			v[x - 1][y] = 0;//回溯时设置为0未访问
-			//sta.pop();
 		}
 		return;
 	}
@@ -575,7 +588,6 @@ void FindShortPath()
 //-------------------------------游戏初始化函数----------------------------------------
 void Start()
 {
-	//LoadImage();
 	initgraph(width, deepth);
 	setbkcolor(RGB(122, 122, 122));
 	cleardevice();
@@ -620,10 +632,8 @@ void Show()
 {
 	int i, j;
 	cleardevice();
-	for(i=0;i<bound;i++)
-	{
-		for(j=0;j<bound;j++)
-		{
+	for(i=0;i<bound;i++){
+		for(j=0;j<bound;j++){
 			if (map[key][i][j] == 0)//绘制墙体1
 				putimagePng(j * imSize, i * imSize, &wall);
 			if (map[key][i][j] == 3)//绘制墙体2
@@ -633,13 +643,11 @@ void Show()
 			if (map[key][i][j] == 7)//显示全部路径
 			{
 				setfillcolor(GREEN);
-				//clearrectangle(j * imSize, i * imSize, (j + 1) * imSize, (i + 1) * imSize); // 清空原有图像，flag，好像不需要
 				fillrectangle(j * imSize, i * imSize, (j + 1) * imSize, (i + 1) * imSize);
 			}
 			if (map[key][i][j] == 8)//显示最短路径
 			{
 				setfillcolor(RED);
-				//clearrectangle(j * imSize, i * imSize, (j + 1) * imSize, (i + 1) * imSize); // 清空原有图像，flag，好像不需要
 				fillrectangle(j * imSize, i * imSize, (j + 1) * imSize, (i + 1) * imSize);
 			}
 			if (map[key][i][j] == 1)
